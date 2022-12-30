@@ -19,7 +19,9 @@ from uptime import uptime_check
 # Define escape variable
 escape = "ok"
 
+# Set the intents
 intents = discord.Intents.default()
+intents.message_content = True
 client = discord.Client(intents=intents)
 
 
@@ -193,7 +195,6 @@ topics = [
 @client.event
 async def on_ready():
     uptime_check()
-    escape = "not ok"
     print('!!! - BACKUP BOT VERSION IS BEING USED - !!!')
     print('')
     print('We have logged in as {0.user}'.format(client))
@@ -214,7 +215,9 @@ async def on_message(message):
             print("")
             print("Time:", current_time)
             print("Main Instance of Artys Moderation is back online, disable backup version")
-            
+            # Restart the backup bot
+            subprocess.call(
+                [sys.executable, os.path.realpath(__file__)] + sys.argv[1:])   
     except:
         if message.author == client.user:
             return
@@ -735,7 +738,7 @@ async def on_message(message):
                 )
                 return
 
-while escape == "ok":
+while escape != 'not ok':
   try:
     if escape == "ok":
       # Get the current time and set it as the current_time variable
