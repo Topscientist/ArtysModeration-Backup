@@ -193,6 +193,7 @@ topics = [
 @client.event
 async def on_ready():
     uptime_check()
+    escape = "not ok"
     print('!!! - BACKUP BOT VERSION IS BEING USED - !!!')
     print('')
     print('We have logged in as {0.user}'.format(client))
@@ -212,11 +213,8 @@ async def on_message(message):
             # Main instance is up, stop backup
             print("")
             print("Time:", current_time)
-            print(
-                "Main Instance of Artys Moderation is back online, disable backup version"
-            )
-            subprocess.call(
-                [sys.executable, os.path.realpath(__file__)] + sys.argv[1:])
+            print("Main Instance of Artys Moderation is back online, disable backup version")
+            
     except:
         if message.author == client.user:
             return
@@ -737,26 +735,29 @@ async def on_message(message):
                 )
                 return
 
-
 while escape == "ok":
-    try:
-        # Get the current time and set it as the current_time variable
-        current_time = datetime.datetime.now()
-        response_code = (urllib.request.urlopen(
-            "https://artys-moderation.topscientist.repl.co/").getcode())
-        print("Time:", current_time)
-        print("Main Instance Status Code:", response_code)
-        if response_code == 200:
-            print("Artys Mod Main Instance Up, Backup Disabled")
-            print("")
-            sleep(10)
-        else:
-            escape = "not ok"
-            print("Main Artys Mod Instance Down, Starting Backup")
-            client.run(os.getenv('TOKEN'))
-    except:
+  try:
+    if escape == "ok":
+      # Get the current time and set it as the current_time variable
+      current_time = datetime.datetime.now()
+      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/").getcode())
+      print("Time:", current_time)
+      print("Main Instance Status Code:", response_code)
+      if response_code == 200:
+        print("Artys Mod Main Instance Up, Backup Disabled")
+        print("")
+        sleep(10)
+      else:
         escape = "not ok"
-        print(
-            'Getting HTTP status of main instance ran into an error, starting backup'
-        )
+        print("Main Artys Mod Instance Down, Starting Backup")
         client.run(os.getenv('TOKEN'))
+    else:
+      print ("")
+      print ("")
+      print ("ESCAPE VAR NOT OK")
+      print ("")
+      print ("")
+  except:
+    escape = "not ok"
+    print('Getting HTTP status of main instance ran into an error, starting backup')
+    client.run(os.getenv('TOKEN'))

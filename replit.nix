@@ -1,5 +1,8 @@
 { pkgs }: {
   deps = [
+    pkgs.dotnet-sdk
+    pkgs.sudo
+    pkgs.wget
     pkgs.python38Full
   ];
   env = {
