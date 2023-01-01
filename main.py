@@ -17,6 +17,7 @@ import datetime
 from uptime import uptime_check
 
 # Define escape variable
+global escape
 escape = "ok"
 
 # Set the intents
@@ -194,7 +195,6 @@ topics = [
 
 @client.event
 async def on_ready():
-    uptime_check()
     print('!!! - BACKUP BOT VERSION IS BEING USED - !!!')
     print('')
     print('We have logged in as {0.user}'.format(client))
@@ -206,19 +206,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    current_time = datetime.datetime.now()
-    response_code_internal = (urllib.request.urlopen(
-        "https://artys-moderation.topscientist.repl.co/").getcode())
-    try:
-        if response_code_internal == 200:
-            # Main instance is up, stop backup
-            print("")
-            print("Time:", current_time)
-            print("Main Instance of Artys Moderation is back online, disable backup version")
-            # Restart the backup bot, to stop it
-            subprocess.call(
-                [sys.executable, os.path.realpath(__file__)] + sys.argv[1:])   
-    except:
         if message.author == client.user:
             return
 
@@ -738,12 +725,13 @@ async def on_message(message):
                 )
                 return
 
-while escape != 'not ok':
+escape = "ok"
+while escape == "ok":
   try:
     if escape == "ok":
       # Get the current time and set it as the current_time variable
       current_time = datetime.datetime.now()
-      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/").getcode())
+      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/", timeout=8).getcode())
       print("Time:", current_time)
       print("Main Instance Status Code:", response_code)
       if response_code == 200:
@@ -753,7 +741,7 @@ while escape != 'not ok':
       else:
         escape = "not ok"
         print("Main Artys Mod Instance Down, Starting Backup")
-        client.run(os.getenv('TOKEN'))
+        break
     else:
       print ("")
       print ("")
@@ -763,4 +751,10 @@ while escape != 'not ok':
   except:
     escape = "not ok"
     print('Getting HTTP status of main instance ran into an error, starting backup')
-    client.run(os.getenv('TOKEN'))
+    break
+
+# Start up Artys Moderation backup as the loop has been broken
+uptime_check()
+if escape == 'not ok':
+  escape = "bot started"
+  client.run(os.getenv('TOKEN'))
