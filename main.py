@@ -754,7 +754,8 @@ while escape == "ok":
     break
 
 # Start up Artys Moderation backup as the loop has been broken
-uptime_check()
 if escape == 'not ok':
   escape = "bot started"
+  uptime_check()
   client.run(os.getenv('TOKEN'))
+  

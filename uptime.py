@@ -1,5 +1,12 @@
 from flask import Flask
 from threading import Thread
+import subprocess
+import sys
+import os
+import datetime
+import urllib.request
+
+bot_started = "false"
 
 app = Flask('Artys Moderation Uptime')
 
@@ -12,4 +19,4 @@ def run():
 
 def uptime_check():
     t = Thread(target=run)
-    t.start() 
+    t.start()
