@@ -200,7 +200,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(activity=discord.Game(
         name=
-        f"BACKUP BOT VERSION | Helping Out On {len(client.guilds)} servers | arty help"
+        f"BACKUP BOT VERSION | Helping Out In {len(client.guilds)} Servers | arty help"
     ))
 
 
@@ -215,7 +215,7 @@ async def on_message(message):
             print("")
             print("Time:", current_time)
             print("Main Instance of Artys Moderation is back online, disable backup version")
-            # Restart the backup bot
+            # Restart the backup bot, to stop it
             subprocess.call(
                 [sys.executable, os.path.realpath(__file__)] + sys.argv[1:])   
     except:
