@@ -725,30 +725,36 @@ async def on_message(message):
                 )
                 return
 
+# Checking if the main instance is online or not
 escape = "ok"
 while escape == "ok":
   try:
     if escape == "ok":
       # Get the current time and set it as the current_time variable
       current_time = datetime.datetime.now()
-      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/", timeout=8).getcode())
+      # Get the HTTP status code of the main instance, times out after 12 seconds
+      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/", timeout=12).getcode())
       print("Time:", current_time)
       print("Main Instance Status Code:", response_code)
       if response_code == 200:
+        # Main instance is A OK, kepp backup off
         print("Artys Mod Main Instance Up, Backup Disabled")
         print("")
         sleep(10)
       else:
+        # Issue with the main instance, start backup just in case
         escape = "not ok"
         print("Main Artys Mod Instance Down, Starting Backup")
         break
     else:
+      # Added an else to prevent errors. This has no real use.
       print ("")
       print ("")
       print ("ESCAPE VAR NOT OK")
       print ("")
       print ("")
   except:
+    # An exception has been raised whilst trying to get the HTTP status of the main instance or the operation has timed out. Main instance is most likely down or needs load balancing, start backup
     escape = "not ok"
     print('Getting HTTP status of main instance ran into an error, starting backup')
     break
@@ -756,6 +762,8 @@ while escape == "ok":
 # Start up Artys Moderation backup as the loop has been broken
 if escape == 'not ok':
   escape = "bot started"
+  # Start the flask server
   uptime_check()
+  # Start Artys Mod Backup
   client.run(os.getenv('TOKEN'))
   
