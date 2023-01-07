@@ -727,13 +727,15 @@ async def on_message(message):
 
 # Checking if the main instance is online or not
 escape = "ok"
+# Set the timeout value (Seconds)
+timeout = 25
 while escape == "ok":
   try:
     if escape == "ok":
       # Get the current time and set it as the current_time variable
       current_time = datetime.datetime.now()
       # Get the HTTP status code of the main instance, times out after 12 seconds
-      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/", timeout=22).getcode())
+      response_code = (urllib.request.urlopen("https://artys-moderation.topscientist.repl.co/", timeout=timeout).getcode())
       print("Time:", current_time)
       print("Main Instance Status Code:", response_code)
       if response_code == 200:
